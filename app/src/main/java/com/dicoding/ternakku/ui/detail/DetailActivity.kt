@@ -35,6 +35,8 @@ class DetailActivity : AppCompatActivity() {
         println(penyakit?.name.toString())
 
         val id = intent.getIntExtra(MainActivity.EXTRA_ID, 0)
+        val named = intent.getStringExtra(MainActivity.EXTRA_NAMED)
+        val detail = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
 
         val name = findViewById<TextView>(R.id.tv_name)
         val description =  findViewById<TextView>(R.id.tv_description)
@@ -65,9 +67,15 @@ class DetailActivity : AppCompatActivity() {
         binding.favorite.setOnClickListener{
             isChecked = !isChecked
             if (isChecked){
-                viewModel.insertFavoriteDesease(id,"name",
-                    "detail",
-                    "handle")
+                if (named != null) {
+                    if (detail != null) {
+                        viewModel.insertFavoriteDesease(
+                            id,
+                            named,
+                            detail,
+                            "handle")
+                    }
+                }
             }else{
                 viewModel.deleteFavoriteDesease(id)
             }

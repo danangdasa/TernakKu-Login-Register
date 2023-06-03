@@ -19,6 +19,7 @@ class ListPenyakitAdapter(private var listPenyakit : ArrayList<Desease>)  : Recy
     fun setList(user: ArrayList<Desease>) {
         listPenyakit.clear()
         listPenyakit.addAll(user)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {

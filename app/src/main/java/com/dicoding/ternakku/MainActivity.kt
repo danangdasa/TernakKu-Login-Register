@@ -79,6 +79,8 @@ class MainActivity: AppCompatActivity()  {
                 val intentToDetail = Intent(this@MainActivity, DetailActivity::class.java)
                 intentToDetail.putExtra(EXTRA_NAME, data)
                 intentToDetail.putExtra(EXTRA_ID, data.id)
+                intentToDetail.putExtra(EXTRA_NAMED, data.name)
+                intentToDetail.putExtra(EXTRA_DETAIL, data.detail)
                 startActivity(intentToDetail)
             }
         })
@@ -96,6 +98,8 @@ class MainActivity: AppCompatActivity()  {
     companion object{
         const val EXTRA_ID = "extra_id"
         const val EXTRA_NAME = "extra_name"
+        const val EXTRA_NAMED = "extra_named"
+        const val EXTRA_DETAIL = "extra_detail"
     }
 
 
