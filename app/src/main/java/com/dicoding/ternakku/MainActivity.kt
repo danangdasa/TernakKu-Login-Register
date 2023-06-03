@@ -77,7 +77,8 @@ class MainActivity: AppCompatActivity()  {
         listPenyakit.setOnItemClickCallback(object : ListPenyakitAdapter.OnItemClickCallback {
             override fun onItemClicked(data: Desease) {
                 val intentToDetail = Intent(this@MainActivity, DetailActivity::class.java)
-                intentToDetail.putExtra("DATA", data)
+                intentToDetail.putExtra(EXTRA_NAME, data)
+                intentToDetail.putExtra(EXTRA_ID, data.id)
                 startActivity(intentToDetail)
             }
         })
@@ -94,6 +95,7 @@ class MainActivity: AppCompatActivity()  {
 
     companion object{
         const val EXTRA_ID = "extra_id"
+        const val EXTRA_NAME = "extra_name"
     }
 
 

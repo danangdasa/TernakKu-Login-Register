@@ -32,7 +32,7 @@ class DetailViewModel (application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun cekFavoriteDesease(id: Int) = favoriteDao?.cekFavoriteDesease(id)
+    suspend fun cekFavoriteDesease(id: Int) = favoriteDao?.cekFavoriteDesease(id)
 
     fun deleteFavoriteDesease(id: Int) {
         CoroutineScope(Dispatchers.IO).launch {

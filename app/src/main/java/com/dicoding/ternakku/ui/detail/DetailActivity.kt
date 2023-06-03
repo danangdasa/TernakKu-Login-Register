@@ -31,7 +31,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val penyakit = intent.getParcelableExtra<Desease>("DATA") as Desease
+        val penyakit = intent.getParcelableExtra<Desease>(MainActivity.EXTRA_NAME) as Desease
         println(penyakit?.name.toString())
 
         val id = intent.getIntExtra(MainActivity.EXTRA_ID, 0)
