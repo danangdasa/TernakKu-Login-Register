@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ternakku.ListPenyakitAdapter
+import com.dicoding.ternakku.ListPenyakitAdapterLocal
 import com.dicoding.ternakku.data.retrofit.Disease
 import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
 import com.dicoding.ternakku.databinding.ActivityFavoriteBinding
@@ -12,7 +13,7 @@ import com.dicoding.ternakku.databinding.ActivityFavoriteBinding
 class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFavoriteBinding
-    private lateinit var adapter: ListPenyakitAdapter
+    private lateinit var adapter: ListPenyakitAdapterLocal
     private lateinit var viewModel: FavoriteViewModel
     private val list = ArrayList<Disease>()
 
@@ -21,7 +22,7 @@ class FavoriteActivity : AppCompatActivity() {
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = ListPenyakitAdapter(list)
+        adapter = ListPenyakitAdapterLocal(list)
         viewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
 
         binding.apply {

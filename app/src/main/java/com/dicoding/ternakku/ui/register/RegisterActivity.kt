@@ -27,11 +27,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataSetting")
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRegisterBinding
-    private lateinit var registerViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +38,6 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
-//        setViewModel()
 
         binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -111,11 +108,4 @@ class RegisterActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
     }
-
-//    private fun setViewModel(){
-//        registerViewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(LoginPreference.getInstance(dataStore))
-//        )[RegisterViewModel::class.java]
-//    }
 }

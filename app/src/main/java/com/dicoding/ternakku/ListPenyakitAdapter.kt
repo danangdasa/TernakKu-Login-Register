@@ -1,48 +1,36 @@
 package com.dicoding.ternakku
 
+import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.ternakku.data.retrofit.Disease
+import com.dicoding.ternakku.data.retrofit.response.ListResponseItem
+import com.dicoding.ternakku.databinding.ListPenyakitBinding
+import com.dicoding.ternakku.ui.detail.DetailActivity
 
-class ListPenyakitAdapter (private var listPenyakit : ArrayList<Disease>)  : RecyclerView.Adapter<ListPenyakitAdapter.ListViewHolder>() {
+class ListPenyakitAdapter (private var listPenyakit : List<ListResponseItem>)  : RecyclerView.Adapter<ListPenyakitAdapter.ViewHolder>() {
 
-    private lateinit var onItemClickCallback : OnItemClickCallback
-
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
+    class ViewHolder(private val binding: ListPenyakitBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(listPenyakit: ListResponseItem){
+            binding.tvName.text =listPenyakit.diseaseName
+            binding.tvDescription.text=listPenyakit.diseaseDetails
+        }
     }
-
-    fun setList(user: ArrayList<Disease>) {
-        listPenyakit.clear()
-        listPenyakit.addAll(user)
-        notifyDataSetChanged()
+    override fun onCreateViewHolder(view: ViewGroup, viewType: Int): ViewHolder {
+        val itemBinding = ListPenyakitBinding.inflate(LayoutInflater.from(view.context), view, false)
+        return ViewHolder(itemBinding)
     }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.list_penyakit, parent, false)
-        return ListViewHolder(view)
+    override fun getItemCount(): Int {
+        return listPenyakit.size
     }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val getListPenyakit = listPenyakit[position]
+        holder.bind(getListPenyakit)
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (id, name, description) = listPenyakit[position]
-        holder.tvName.text = name
-        holder.tvDescription.text = description
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listPenyakit[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener {
+            val moveToDetail = Intent(holder.itemView.context, DetailActivity::class.java)
+            moveToDetail.putExtra(DetailActivity.KEY_ID, getListPenyakit.diseaseName)
+            holder.itemView.context.startActivity(moveToDetail)
+        }
     }
-
-    override fun getItemCount(): Int = listPenyakit.size
-
-    class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvName: TextView = itemView.findViewById(R.id.tv_name)
-        val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
-    }
-
-    interface OnItemClickCallback {
-        fun onItemClicked(data: Disease)
-    }
-
 }

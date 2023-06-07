@@ -4,24 +4,30 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.ternakku.data.retrofit.Disease
+import com.dicoding.ternakku.data.retrofit.ApiConfig
+import com.dicoding.ternakku.data.retrofit.response.ListResponse
+import com.dicoding.ternakku.data.retrofit.response.ListResponseItem
 import com.dicoding.ternakku.databinding.ActivityMainBinding
 import com.dicoding.ternakku.preference.LoginPreference
-import com.dicoding.ternakku.ui.detail.DetailActivity
 import com.dicoding.ternakku.ui.favorite.FavoriteActivity
 import com.dicoding.ternakku.ui.login.LoginActivity
 import com.dicoding.ternakku.ui.scan.ScanActivity
 import com.dicoding.ternakku.viewmodelfactory.ViewModelFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataSetting")
 class MainActivity : AppCompatActivity() {
@@ -29,8 +35,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
-    private lateinit var rView: RecyclerView
-    private val list = ArrayList<Disease>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +43,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setViewModel()
+        val layoutManager = LinearLayoutManager(this)
+        binding.rVList.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rVList.addItemDecoration(itemDecoration)
 
-        rView = findViewById(R.id.rV_list)
-        rView.setHasFixedSize(true)
-
-        list.addAll(getListPenyakit())
-        showRecyclerList()
 
         binding.efbScan.setOnClickListener {
             val intent = Intent(this@MainActivity, ScanActivity::class.java)
@@ -67,6 +70,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.getLoginUser().observe(this) { userData ->
+            val tokken = userData.token
+            getListData(tokken)
+        }
+    }
+
     private fun setViewModel(){
         val pref = LoginPreference.getInstance(dataStore)
         mainViewModel = ViewModelProvider(
@@ -85,34 +96,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getListPenyakit(): ArrayList<Disease> {
-        val dataId = resources.getIntArray(R.array.id_penyakit)
-        val dataName = resources.getStringArray(R.array.nama_penyakit)
-        val dataDescription = resources.getStringArray(R.array.detail_penyakit)
-        val dataHeandle = resources.getStringArray(R.array.cara_mengatasi)
-        val listPenyakit = ArrayList<Disease>()
-        for (i in dataName.indices) {
-            val penyakit = Disease(dataId[i],dataName[i], dataDescription[i], dataHeandle[i])
-            listPenyakit.add(penyakit)
-        }
-        return listPenyakit
+    private fun getListData(token: String){
+        showLoading(true)
+        val client = ApiConfig.getApiService().getList("Bearer " + token)
+        client.enqueue(object : Callback<ListResponse> {
+            override fun onResponse(
+                call: Call<ListResponse>,
+                response: Response<ListResponse>
+            ) {
+                showLoading(false)
+                if(response.isSuccessful){
+                    val responsBody = response.body()
+                    if (responsBody!= null){
+                        setData(responsBody.listResponse as List<ListResponseItem>)
+                        Toast.makeText(this@MainActivity, responsBody.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@MainActivity, response.message(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ListResponse>, t: Throwable) {
+                showLoading(false)
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(this@MainActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
-    private fun showRecyclerList() {
-        rView.layoutManager = LinearLayoutManager(this)
-        val listPenyakit = ListPenyakitAdapter(list)
-        rView.adapter = listPenyakit
-
-        listPenyakit.setOnItemClickCallback(object : ListPenyakitAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: Disease) {
-                val intentToDetail = Intent(this@MainActivity, DetailActivity::class.java)
-                intentToDetail.putExtra(EXTRA_NAME, data)
-                intentToDetail.putExtra(EXTRA_ID, data.id)
-                intentToDetail.putExtra(EXTRA_NAMED, data.name)
-                intentToDetail.putExtra(EXTRA_DETAIL, data.detail)
-                startActivity(intentToDetail)
-            }
-        })
+    private fun setData(listPenyakit: List<ListResponseItem>){
+        val adapter = ListPenyakitAdapter(listPenyakit)
+        binding.rVList.adapter = adapter
     }
 
     private fun showLoading(isLoading: Boolean){
@@ -141,6 +156,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object{
+        const val TAG = "MainActivity"
         const val EXTRA_ID = "extra_id"
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_NAMED = "extra_named"

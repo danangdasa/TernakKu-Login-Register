@@ -3,19 +3,28 @@ package com.dicoding.ternakku.ui.detail
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.dicoding.ternakku.MainActivity
 import com.dicoding.ternakku.R
+import com.dicoding.ternakku.data.retrofit.ApiConfig
 import com.dicoding.ternakku.data.retrofit.Disease
+import com.dicoding.ternakku.data.retrofit.response.ListResponse
+import com.dicoding.ternakku.data.retrofit.response.ListResponseItem
 import com.dicoding.ternakku.databinding.ActivityDetailBinding
 import com.dicoding.ternakku.ui.favorite.FavoriteActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DetailActivity : AppCompatActivity() {
 
@@ -95,5 +104,10 @@ class DetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    companion object{
+        const val TAG = "DetailActivity"
+        const val KEY_ID = "id"
     }
 }
