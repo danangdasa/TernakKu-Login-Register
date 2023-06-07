@@ -1,10 +1,7 @@
 package com.dicoding.ternakku.data.retrofit
 
 
-import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
-import com.dicoding.ternakku.data.retrofit.response.ListResponse
-import com.dicoding.ternakku.data.retrofit.response.LoginResponse
-import com.dicoding.ternakku.data.retrofit.response.RegisterResponse
+import com.dicoding.ternakku.data.retrofit.response.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -26,7 +23,7 @@ interface ApiService {
     @GET("diseases")
     fun getList(
         @Header("Authorization") token: String,
-    ) : Call<ListResponse>
+    ) : Call<ListDiseasesResponse>
 
     @FormUrlEncoded
     @POST("authentication/register")

@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ternakku.data.retrofit.ApiConfig
-import com.dicoding.ternakku.data.retrofit.response.ListResponse
-import com.dicoding.ternakku.data.retrofit.response.ListResponseItem
+import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponse
+import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.databinding.ActivityMainBinding
 import com.dicoding.ternakku.preference.LoginPreference
 import com.dicoding.ternakku.ui.favorite.FavoriteActivity
@@ -99,16 +99,16 @@ class MainActivity : AppCompatActivity() {
     private fun getListData(token: String){
         showLoading(true)
         val client = ApiConfig.getApiService().getList("Bearer " + token)
-        client.enqueue(object : Callback<ListResponse> {
+        client.enqueue(object : Callback<ListDiseasesResponse> {
             override fun onResponse(
-                call: Call<ListResponse>,
-                response: Response<ListResponse>
+                call: Call<ListDiseasesResponse>,
+                response: Response<ListDiseasesResponse>
             ) {
                 showLoading(false)
                 if(response.isSuccessful){
                     val responsBody = response.body()
                     if (responsBody!= null){
-                        setData(responsBody.listResponse as List<ListResponseItem>)
+                        setData(responsBody.listDiseasesResponse as List<ListDiseasesResponseItem>)
                         Toast.makeText(this@MainActivity, responsBody.toString(), Toast.LENGTH_SHORT).show()
                     }
                 } else {
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ListDiseasesResponse>, t: Throwable) {
                 showLoading(false)
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
                 Toast.makeText(this@MainActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun setData(listPenyakit: List<ListResponseItem>){
+    private fun setData(listPenyakit: List<ListDiseasesResponseItem>){
         val adapter = ListPenyakitAdapter(listPenyakit)
         binding.rVList.adapter = adapter
     }

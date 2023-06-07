@@ -4,14 +4,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.ternakku.data.retrofit.response.ListResponseItem
+import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.databinding.ListPenyakitBinding
 import com.dicoding.ternakku.ui.detail.DetailActivity
 
-class ListPenyakitAdapter (private var listPenyakit : List<ListResponseItem>)  : RecyclerView.Adapter<ListPenyakitAdapter.ViewHolder>() {
+class ListPenyakitAdapter (private var listPenyakit : List<ListDiseasesResponseItem>)  : RecyclerView.Adapter<ListPenyakitAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ListPenyakitBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(listPenyakit: ListResponseItem){
+        fun bind(listPenyakit: ListDiseasesResponseItem){
             binding.tvName.text =listPenyakit.diseaseName
             binding.tvDescription.text=listPenyakit.diseaseDetails
         }
@@ -23,6 +23,7 @@ class ListPenyakitAdapter (private var listPenyakit : List<ListResponseItem>)  :
     override fun getItemCount(): Int {
         return listPenyakit.size
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val getListPenyakit = listPenyakit[position]
         holder.bind(getListPenyakit)
