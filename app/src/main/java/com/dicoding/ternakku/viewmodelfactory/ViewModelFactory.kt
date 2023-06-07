@@ -17,9 +17,9 @@ class ViewModelFactory(private val pref: LoginPreference) : ViewModelProvider.Ne
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(pref) as T
             }
-            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
-                RegisterViewModel(pref) as T
-            }
+//            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
+//                RegisterViewModel(pref) as T
+//            }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(pref) as T
             }

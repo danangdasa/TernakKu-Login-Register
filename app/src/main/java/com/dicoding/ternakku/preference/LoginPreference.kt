@@ -9,36 +9,18 @@ import kotlinx.coroutines.flow.*
 
 class LoginPreference private constructor(private val dataStore: DataStore<Preferences>){
 
-    fun getUserData(): Flow<Authorize>{
-        return dataStore.data.map { preference ->
-            Authorize(
-                preference[NAME_KEY] ?: "",
-                preference[EMAIL_KEY] ?: "",
-                preference[PASSWORD_KEY] ?: "",
-                preference[STATE_KEY] ?: false
-            )
-        }
-    }
-
-    suspend fun saveUserData(login: Authorize){
-        dataStore.edit { preference ->
-            preference[NAME_KEY] = login.name
-            preference[EMAIL_KEY] = login.email
-            preference[PASSWORD_KEY] = login.password
-            preference[STATE_KEY] = login.isLogin
-        }
-    }
-
     suspend fun saveToken(userToken: AuthorizeModel){
         dataStore.edit { preference ->
             preference[TOKEN_KEY] = userToken.token
+            preference[STATE_KEY] = userToken.isLogin
         }
     }
 
     fun getToken(): Flow<AuthorizeModel>{
         return dataStore.data.map { preference ->
             AuthorizeModel(
-                preference[TOKEN_KEY] ?: ""
+                preference[TOKEN_KEY] ?: "",
+                preference[STATE_KEY] ?: false
             )
         }
     }
@@ -66,9 +48,6 @@ class LoginPreference private constructor(private val dataStore: DataStore<Prefe
         @Volatile
         private var INSTANCE: LoginPreference? = null
 
-        private val NAME_KEY = stringPreferencesKey("name")
-        private val EMAIL_KEY = stringPreferencesKey("email")
-        private val PASSWORD_KEY = stringPreferencesKey("password")
         private val STATE_KEY = booleanPreferencesKey("state")
         private val TOKEN_KEY = stringPreferencesKey("token")
 

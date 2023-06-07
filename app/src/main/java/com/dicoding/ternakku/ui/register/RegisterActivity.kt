@@ -20,7 +20,6 @@ import com.dicoding.ternakku.R
 import com.dicoding.ternakku.data.retrofit.ApiConfig
 import com.dicoding.ternakku.data.retrofit.response.RegisterResponse
 import com.dicoding.ternakku.databinding.ActivityRegisterBinding
-import com.dicoding.ternakku.preference.Authorize
 import com.dicoding.ternakku.preference.LoginPreference
 import com.dicoding.ternakku.ui.login.LoginActivity
 import com.dicoding.ternakku.viewmodelfactory.ViewModelFactory
@@ -28,7 +27,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataSetting")
+//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataSetting")
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRegisterBinding
@@ -41,7 +40,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
-        setViewModel()
+//        setViewModel()
 
         binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -62,7 +61,6 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
 
-            registerViewModel.saveUser(Authorize(name, email, password, false))
             postRegister(name, email, password)
         }
 
@@ -114,10 +112,10 @@ class RegisterActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun setViewModel(){
-        registerViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(LoginPreference.getInstance(dataStore))
-        )[RegisterViewModel::class.java]
-    }
+//    private fun setViewModel(){
+//        registerViewModel = ViewModelProvider(
+//            this,
+//            ViewModelFactory(LoginPreference.getInstance(dataStore))
+//        )[RegisterViewModel::class.java]
+//    }
 }

@@ -94,9 +94,9 @@ class LoginActivity : AppCompatActivity() {
             ViewModelFactory(LoginPreference.getInstance(dataStore))
         )[LoginViewModel::class.java]
 
-        loginViewModel.getUser().observe(this, {user ->
+        loginViewModel.getUser().observe(this) { user ->
             this.user = user
-        })
+        }
     }
 
     private fun userLogin(email: String, password: String){
@@ -107,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                     val responseBody = response.body()
                     if (responseBody!= null){
                         val token = responseBody.loginResult.token
-                        loginViewModel.saveUserData(AuthorizeModel(token))
+                        loginViewModel.saveUserData(AuthorizeModel(token, true))
 
                         Toast.makeText(this@LoginActivity, responseBody.message, Toast.LENGTH_SHORT).show()
 
