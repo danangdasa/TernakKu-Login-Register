@@ -5,15 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.ternakku.MainActivity
 import com.dicoding.ternakku.R
-import com.dicoding.ternakku.data.retrofit.Desease
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDao
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDesease
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDeseaseRoomDatabase
+import com.dicoding.ternakku.data.retrofit.Disease
 import com.dicoding.ternakku.databinding.ActivityDetailBinding
 import com.dicoding.ternakku.ui.favorite.FavoriteActivity
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +27,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val penyakit = intent.getParcelableExtra<Desease>(MainActivity.EXTRA_NAME) as Desease
+        val penyakit = intent.getParcelableExtra<Disease>(MainActivity.EXTRA_NAME) as Disease
         println(penyakit?.name.toString())
 
         val id = intent.getIntExtra(MainActivity.EXTRA_ID, 0)
@@ -50,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
 
         var isChecked = false
         CoroutineScope(Dispatchers.IO).launch {
-            val count = viewModel.cekFavoriteDesease(id)
+            val count = viewModel.cekFavoriteDisease(id)
             withContext(Dispatchers.Main){
                 if (count != null){
                     if (count>0){
@@ -69,7 +65,7 @@ class DetailActivity : AppCompatActivity() {
             if (isChecked){
                 if (named != null) {
                     if (detail != null) {
-                        viewModel.insertFavoriteDesease(
+                        viewModel.insertFavoriteDisease(
                             id,
                             named,
                             detail,
@@ -77,11 +73,12 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
             }else{
-                viewModel.deleteFavoriteDesease(id)
+                viewModel.deleteFavoriteDisease(id)
             }
             binding.favorite.isChecked = isChecked
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.favorite_menu, menu)
         return super.onCreateOptionsMenu(menu)

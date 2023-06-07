@@ -3,8 +3,8 @@ package com.dicoding.ternakku.ui.detail
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDao
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDesease
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDeseaseRoomDatabase
+import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
+import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDiseaseRoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,31 +12,31 @@ import kotlinx.coroutines.launch
 class DetailViewModel (application: Application) : AndroidViewModel(application) {
 
     private var favoriteDao: FavoriteDao?
-    private var favoriteDb: FavoriteDeseaseRoomDatabase?
+    private var favoriteDb: FavoriteDiseaseRoomDatabase?
 
 
     init {
-        favoriteDb = FavoriteDeseaseRoomDatabase.getDataBase(application)
+        favoriteDb = FavoriteDiseaseRoomDatabase.getDataBase(application)
         favoriteDao = favoriteDb?.favoriteDao()
     }
 
-    fun insertFavoriteDesease(id: Int, name: String, detail: String, handle: String) {
+    fun insertFavoriteDisease(id: Int, name: String, detail: String, handle: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val penyakit = FavoriteDesease(
+            val penyakit = FavoriteDisease(
                 id,
                 name,
                 detail,
                 handle
             )
-            favoriteDao?.insertFavoriteDesease(penyakit)
+            favoriteDao?.insertFavoriteDisease(penyakit)
         }
     }
 
-    suspend fun cekFavoriteDesease(id: Int) = favoriteDao?.cekFavoriteDesease(id)
+    suspend fun cekFavoriteDisease(id: Int) = favoriteDao?.cekFavoriteDisease(id)
 
-    fun deleteFavoriteDesease(id: Int) {
+    fun deleteFavoriteDisease(id: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            favoriteDao?.deleteFavoriteDesease(id)
+            favoriteDao?.deleteFavoriteDisease(id)
         }
     }
 }

@@ -2,14 +2,11 @@ package com.dicoding.ternakku.ui.favorite
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ternakku.ListPenyakitAdapter
-import com.dicoding.ternakku.data.retrofit.Desease
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDao
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDesease
-import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDeseaseRoomDatabase
+import com.dicoding.ternakku.data.retrofit.Disease
+import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
 import com.dicoding.ternakku.databinding.ActivityFavoriteBinding
 
 class FavoriteActivity : AppCompatActivity() {
@@ -17,7 +14,7 @@ class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
     private lateinit var adapter: ListPenyakitAdapter
     private lateinit var viewModel: FavoriteViewModel
-    private val list = ArrayList<Desease>()
+    private val list = ArrayList<Disease>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +30,18 @@ class FavoriteActivity : AppCompatActivity() {
             rvFavorite.adapter = adapter
         }
 
-        viewModel.getFavoriteDeseases()?.observe(this) {
+        viewModel.getFavoriteDiseases()?.observe(this) {
             if (it != null) {
                 val list = getListPenyakit(it)
                 adapter.setList(list)
             }
         }
-
     }
-    private fun getListPenyakit(deseases: List<FavoriteDesease>): ArrayList<Desease> {
-        val listDesease = ArrayList<Desease>()
+
+    private fun getListPenyakit(deseases: List<FavoriteDisease>): ArrayList<Disease> {
+        val listDesease = ArrayList<Disease>()
         for (desease in deseases) {
-            val userMapped = Desease(
+            val userMapped = Disease(
                 desease.id,
                 desease.name,
                 desease.detail,
@@ -54,6 +51,4 @@ class FavoriteActivity : AppCompatActivity() {
         }
         return listDesease
     }
-
-
 }

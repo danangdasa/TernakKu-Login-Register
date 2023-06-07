@@ -5,5 +5,11 @@
         android:id="@+id/favorite"
         android:icon="@drawable/baseline_favorite_24"
         app:showAsAction="ifRoom"
-        android:title="Favorite"/>
+        android:title="@string/favorite"/>
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/baseline_logout_24"
+        app:showAsAction="collapseActionView"
+        android:title="@string/logout"/>
 </menu>

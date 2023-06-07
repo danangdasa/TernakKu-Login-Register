@@ -1,6 +1,7 @@
 package com.dicoding.ternakku.ui.scan
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
@@ -16,11 +17,17 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.dicoding.ternakku.R
 import com.dicoding.ternakku.data.retrofit.ApiConfig
-import com.dicoding.ternakku.data.retrofit.DiseaseResponse
+import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
 import com.dicoding.ternakku.databinding.ActivityScanBinding
+import com.dicoding.ternakku.preference.LoginPreference
 import com.dicoding.ternakku.ui.result.ResultActivity
+import com.dicoding.ternakku.viewmodelfactory.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -30,9 +37,12 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "dataSetting")
 class ScanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScanBinding
+    private lateinit var scanViewModel: ScanViewModel
+
     private var getFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +52,7 @@ class ScanActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
+        setupViewModel()
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -69,6 +80,13 @@ class ScanActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
 
+    private fun setupViewModel(){
+        scanViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(LoginPreference.getInstance(dataStore))
+        )[ScanViewModel::class.java]
+    }
+
     private fun scanImage() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
@@ -79,35 +97,39 @@ class ScanActivity : AppCompatActivity() {
                 requestImageFile
             )
             showLoading(true)
-            val service = ApiConfig.getApiService().predictDisease(imageMultiPart)
-            service.enqueue(object : Callback<DiseaseResponse>{
-                override fun onResponse(
-                    call: Call<DiseaseResponse>,
-                    response: Response<DiseaseResponse>
-                ) {
-                    if (response.isSuccessful){
-                        showLoading(false)
-                        val responseBody = response.body()
 
-                        if (responseBody!= null){
-                            Log.d("SanActivity", responseBody.diseaseName)
-                            Toast.makeText(this@ScanActivity, responseBody.diseaseName, Toast.LENGTH_SHORT).show()
+            scanViewModel.getUserData().observe(this) { dataUser ->
+                val token = dataUser.token
+                val service = ApiConfig.getApiService().predictDisease("Bearer "+ token, imageMultiPart)
+                service.enqueue(object : Callback<DiseaseResponse>{
+                    override fun onResponse(
+                        call: Call<DiseaseResponse>,
+                        response: Response<DiseaseResponse>
+                    ) {
+                        if (response.isSuccessful){
+                            showLoading(false)
+                            val responseBody = response.body()
 
-                            val intent = Intent(this@ScanActivity, ResultActivity::class.java)
-                            intent.putExtra("disease", responseBody.diseaseName)
-                            intent.putExtra("img", responseBody.originalImage)
+                            if (responseBody!= null){
+                                Log.d("SanActivity", responseBody.diseaseName)
+                                Toast.makeText(this@ScanActivity, responseBody.diseaseName, Toast.LENGTH_SHORT).show()
 
-                            startActivity(intent)
+                                val intent = Intent(this@ScanActivity, ResultActivity::class.java)
+                                intent.putExtra("disease", responseBody.diseaseName)
+                                intent.putExtra("img", responseBody.originalImage)
+
+                                startActivity(intent)
+                            }
                         }
                     }
-                }
 
-                override fun onFailure(call: Call<DiseaseResponse>, t: Throwable) {
-                    Log.e("ScanActivity", "onFailure: ${t.message.toString()}")
-                    Toast.makeText(this@ScanActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
-                }
+                    override fun onFailure(call: Call<DiseaseResponse>, t: Throwable) {
+                        Log.e("ScanActivity", "onFailure: ${t.message.toString()}")
+                        Toast.makeText(this@ScanActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
+                    }
 
-            })
+                })
+            }
 
         } else {
             Toast.makeText(this@ScanActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()

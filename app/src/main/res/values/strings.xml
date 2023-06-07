@@ -22,6 +22,10 @@
     <string name="search_hint">Masukkan nama penyakit…</string>
     <string name="logo">logo</string>
 
+    <string name="favorite">Favorite</string>
+    <string name="logout">Keluar</string>
+
+
     <integer-array name="id_penyakit">
         <item>1</item>
         <item>2</item>
@@ -46,4 +50,25 @@
         <item>Untuk mengelola infeksi Salmonella, penting untuk menjaga kebersihan yang baik, menyediakan air minum yang bersih, dan menerapkan langkah biosekuriti. Pemberian antibiotik yang sesuai mungkin diperlukan setelah berkonsultasi dengan dokter hewan.</item>
     </string-array>
 
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="hintName">Masukkan Nama</string>
+    <string name="hintEmail">Masukkan alamat surel</string>
+    <string name="hintPass">Masukkan kata sandi</string>
+    <string name="errorPass">minimal 8 karakter untuk membuat password</string>
+    <string name="errorEmail">masukkan format email yang benar</string>
+
+    <string name="sign_in">Masuk</string>
+    <string name="sign_up">Daftar</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>

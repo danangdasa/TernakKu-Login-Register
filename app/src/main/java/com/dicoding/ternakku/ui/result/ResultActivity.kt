@@ -8,15 +8,20 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.dicoding.ternakku.R
 import com.dicoding.ternakku.data.retrofit.ApiConfig
-import com.dicoding.ternakku.data.retrofit.DiseaseResponse
+import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
 import com.dicoding.ternakku.databinding.ActivityResultBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.math.abs
+
 
 class ResultActivity : AppCompatActivity() {
 
@@ -27,7 +32,7 @@ class ResultActivity : AppCompatActivity() {
 
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         binding.actResult.setOnTouchListener(object : OnSwipeTouchListener(this@ResultActivity){
 
             override fun onSwipeRight() {
@@ -46,7 +51,7 @@ class ResultActivity : AppCompatActivity() {
 
     private fun getPredict(name: String){
         val client = ApiConfig.getApiService().getDetails(name)
-        client.enqueue(object : Callback<DiseaseResponse>{
+        client.enqueue(object : Callback<DiseaseResponse> {
             override fun onResponse(
                 call: Call<DiseaseResponse>,
                 response: Response<DiseaseResponse>
@@ -82,7 +87,6 @@ class ResultActivity : AppCompatActivity() {
 
         }
     }
-
 
     open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
 

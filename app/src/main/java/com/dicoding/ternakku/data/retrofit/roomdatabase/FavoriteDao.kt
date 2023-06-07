@@ -8,14 +8,14 @@ import androidx.room.Query
 @Dao
 interface FavoriteDao {
     @Insert
-    suspend fun insertFavoriteDesease(favoriteDesease: FavoriteDesease)
+    suspend fun insertFavoriteDisease(favoriteDisease: FavoriteDisease)
 
     @Query("SELECT * FROM favorite_desease")
-    fun getFavoriteDesease(): LiveData<List<FavoriteDesease>>
+    fun getFavoriteDisease(): LiveData<List<FavoriteDisease>>
 
     @Query("SELECT count(*) FROM favorite_desease WHERE favorite_desease.id = :id")
-    suspend fun cekFavoriteDesease(id : Int) : Int
+    suspend fun cekFavoriteDisease(id : Int) : Int
 
     @Query("DELETE FROM favorite_desease WHERE favorite_desease.id = :id")
-    suspend fun deleteFavoriteDesease(id: Int) : Int
+    suspend fun deleteFavoriteDisease(id: Int) : Int
 }

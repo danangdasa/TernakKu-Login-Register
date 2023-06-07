@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.ternakku.data.retrofit.Desease
+import com.dicoding.ternakku.data.retrofit.Disease
 
-class ListPenyakitAdapter(private var listPenyakit : ArrayList<Desease>)  : RecyclerView.Adapter<ListPenyakitAdapter.ListViewHolder>() {
+class ListPenyakitAdapter (private var listPenyakit : ArrayList<Disease>)  : RecyclerView.Adapter<ListPenyakitAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback : OnItemClickCallback
 
@@ -16,7 +16,7 @@ class ListPenyakitAdapter(private var listPenyakit : ArrayList<Desease>)  : Recy
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setList(user: ArrayList<Desease>) {
+    fun setList(user: ArrayList<Disease>) {
         listPenyakit.clear()
         listPenyakit.addAll(user)
         notifyDataSetChanged()
@@ -42,6 +42,7 @@ class ListPenyakitAdapter(private var listPenyakit : ArrayList<Desease>)  : Recy
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Desease)
+        fun onItemClicked(data: Disease)
     }
+
 }
