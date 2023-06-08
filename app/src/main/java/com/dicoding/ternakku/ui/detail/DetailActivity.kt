@@ -44,8 +44,8 @@ class DetailActivity : AppCompatActivity() {
         }
 
         val diseaseName = intent.getStringExtra(MainActivity.EXTRA_DISEASENAME)
-        val named = intent.getStringExtra(MainActivity.EXTRA_NAMED)
-        val detail = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
+        val handlingMethod = intent.getStringExtra(MainActivity.EXTRA_NAMED)
+        val diseaseDetails = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
 
         var isChecked = false
         CoroutineScope(Dispatchers.IO).launch {
@@ -66,13 +66,13 @@ class DetailActivity : AppCompatActivity() {
         binding.favorite.setOnClickListener {
             isChecked = !isChecked
             if (isChecked) {
-                if (named != null) {
-                    if (detail != null) {
-                        viewModel.insertFavoriteDisease(
-                            named,
-                            detail,
-                            "handle"
-                        )
+                if (diseaseName != null) {
+                    if (diseaseDetails != null) {
+                        if (handlingMethod != null) {
+                            viewModel.insertFavoriteDisease(
+                                diseaseName, diseaseDetails, handlingMethod
+                            )
+                        }
                     }
                 }
             } else {

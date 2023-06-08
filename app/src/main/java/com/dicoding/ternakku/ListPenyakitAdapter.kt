@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
 import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
 import com.dicoding.ternakku.databinding.ListPenyakitBinding

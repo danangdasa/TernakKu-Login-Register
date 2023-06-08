@@ -10,4 +10,5 @@ data class FavoriteDisease (
     val diseaseName : String,
     val diseaseDetails : String,
     val handlingMethod : String,
+
 ): Serializable
