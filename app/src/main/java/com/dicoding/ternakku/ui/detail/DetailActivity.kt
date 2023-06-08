@@ -8,12 +8,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
+import com.dicoding.ternakku.ListPenyakitAdapter
+import com.dicoding.ternakku.MainActivity
 import com.dicoding.ternakku.R
 import com.dicoding.ternakku.data.retrofit.ApiConfig
 import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
+import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.databinding.ActivityDetailBinding
 import com.dicoding.ternakku.ui.favorite.FavoriteActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,54 +28,59 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private lateinit var viewModel: DetailViewModel
+    private lateinit var adapter: ListPenyakitAdapter
+    private val list = ArrayList<ListDiseasesResponseItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        adapter = ListPenyakitAdapter(list)
         setViewModel()
-        val getDisease = intent.getStringExtra("diseaseName")
+        val getDisease = intent.getStringExtra("name")
         if (getDisease != null) {
             getDetail(getDisease)
         }
 
+        val id = intent.getIntExtra(MainActivity.EXTRA_ID, 0)
+        val named = intent.getStringExtra(MainActivity.EXTRA_NAMED)
+        val detail = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
 
-//        var isChecked = false
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val count = viewModel.cekFavoriteDisease()
-//            withContext(Dispatchers.Main) {
-//                if (count != null) {
-//                    if (count > 0) {
-//                        binding.favorite.isChecked = true
-//                        isChecked = true
-//                    } else {
-//                        binding.favorite.isChecked = false
-//                        isChecked = false
-//                    }
-//                }
-//            }
-//        }
-//
-//        binding.favorite.setOnClickListener {
-//            isChecked = !isChecked
-//            if (isChecked) {
-//                if (named != null) {
-//                    if (detail != null) {
-//                        viewModel.insertFavoriteDisease(
-//                            id,
-//                            named,
-//                            detail,
-//                            "handle"
-//                        )
-//                    }
-//                }
-//            } else {
-//                viewModel.deleteFavoriteDisease(id)
-//            }
-//            binding.favorite.isChecked = isChecked
-//        }
+        var isChecked = false
+        CoroutineScope(Dispatchers.IO).launch {
+            val count = viewModel.cekFavoriteDisease(id)
+            withContext(Dispatchers.Main) {
+                if (count != null) {
+                    if (count > 0) {
+                        binding.favorite.isChecked = true
+                        isChecked = true
+                    } else {
+                        binding.favorite.isChecked = false
+                        isChecked = false
+                    }
+                }
+            }
+        }
+
+        binding.favorite.setOnClickListener {
+            isChecked = !isChecked
+            if (isChecked) {
+                if (named != null) {
+                    if (detail != null) {
+                        viewModel.insertFavoriteDisease(
+                            id,
+                            named,
+                            detail,
+                            "handle"
+                        )
+                    }
+                }
+            } else {
+                viewModel.deleteFavoriteDisease(id)
+            }
+            binding.favorite.isChecked = isChecked
+        }
     }
 
     private fun setViewModel(){
@@ -89,13 +100,11 @@ class DetailActivity : AppCompatActivity() {
                     val responseBody = response.body()
                     if (responseBody!= null){
                         setDetailsContent(responseBody)
-                        Log.e("DetailActivity", "Error Bagian If")
                         Toast.makeText(
                             this@DetailActivity, "Success",
                             Toast.LENGTH_SHORT
                         ).show()
                     }else{
-                        Log.e("DetailActivity", "Error Bagian Else")
                         Toast.makeText(this@DetailActivity, "Error", Toast.LENGTH_SHORT)
                             .show()
                     }

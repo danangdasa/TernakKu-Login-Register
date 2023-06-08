@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.dicoding.ternakku.data.retrofit.Disease
 import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponse
 import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.databinding.ListPenyakitBinding
@@ -34,5 +35,11 @@ class ListPenyakitAdapter (private var listPenyakit : ArrayList<ListDiseasesResp
             moveToDetail.putExtra(DetailActivity.KEY_ID, getListPenyakit.diseaseName)
             holder.itemView.context.startActivity(moveToDetail)
         }
+    }
+
+    fun setList(listPenyakit: ArrayList<ListDiseasesResponseItem>) {
+        listPenyakit.clear()
+        listPenyakit.addAll(listPenyakit)
+        notifyDataSetChanged()
     }
 }

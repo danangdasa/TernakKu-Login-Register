@@ -35,13 +35,13 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         favoriteDao = favoriteDb?.favoriteDao()
     }
 
-    fun insertFavoriteDisease(id: Int, name: String, detail: String, handle: String) {
+    fun insertFavoriteDisease(id: Int, diseaseName : String, diseaseDetails : String, handlingMethod : String) {
         CoroutineScope(Dispatchers.IO).launch {
             val penyakit = FavoriteDisease(
                 id,
-                name,
-                detail,
-                handle
+                diseaseName,
+                diseaseDetails,
+                handlingMethod
             )
             favoriteDao?.insertFavoriteDisease(penyakit)
         }

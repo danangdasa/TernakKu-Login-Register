@@ -8,7 +8,7 @@ import java.io.Serializable
 data class FavoriteDisease (
     @PrimaryKey
     val id : Int,
-    val name : String,
-    val detail : String,
-    val handle : String
+    val diseaseName : String,
+    val diseaseDetails : String,
+    val handlingMethod : String
 ): Serializable

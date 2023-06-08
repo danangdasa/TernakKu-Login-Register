@@ -5,24 +5,23 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ternakku.ListPenyakitAdapter
-import com.dicoding.ternakku.ListPenyakitAdapterLocal
-import com.dicoding.ternakku.data.retrofit.Disease
+import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
 import com.dicoding.ternakku.databinding.ActivityFavoriteBinding
 
 class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFavoriteBinding
-    private lateinit var adapter: ListPenyakitAdapterLocal
+    private lateinit var adapter: ListPenyakitAdapter
     private lateinit var viewModel: FavoriteViewModel
-    private val list = ArrayList<Disease>()
+    private val list = ArrayList<ListDiseasesResponseItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = ListPenyakitAdapterLocal(list)
+        adapter = ListPenyakitAdapter(list)
         viewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
 
         binding.apply {
@@ -39,13 +38,13 @@ class FavoriteActivity : AppCompatActivity() {
         }
     }
 
-    private fun getListPenyakit(deseases: List<FavoriteDisease>): ArrayList<Disease> {
-        val listDesease = ArrayList<Disease>()
+    private fun getListPenyakit(deseases: List<FavoriteDisease>): ArrayList<ListDiseasesResponseItem> {
+        val listDesease = ArrayList<ListDiseasesResponseItem>()
         for (desease in deseases) {
-            val userMapped = Disease(
-                desease.name,
-                desease.detail,
-                desease.handle
+            val userMapped = ListDiseasesResponseItem(
+                desease.diseaseName,
+                desease.diseaseDetails,
+                desease.handlingMethod
             )
             listDesease.add(userMapped)
         }
