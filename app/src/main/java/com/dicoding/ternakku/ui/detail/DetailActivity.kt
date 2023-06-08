@@ -43,13 +43,13 @@ class DetailActivity : AppCompatActivity() {
             getDetail(getDisease)
         }
 
-        val diseaseName = intent.getStringExtra(MainActivity.EXTRA_NAME)
+        val diseaseName = intent.getStringExtra(MainActivity.EXTRA_DISEASENAME)
         val named = intent.getStringExtra(MainActivity.EXTRA_NAMED)
         val detail = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
 
         var isChecked = false
         CoroutineScope(Dispatchers.IO).launch {
-            val count = viewModel.cekFavoriteDisease(diseaseName.toString())
+            val count = diseaseName?.let { viewModel.cekFavoriteDisease(it) }
             withContext(Dispatchers.Main) {
                 if (count != null) {
                     if (count > 0.toString()) {
@@ -76,7 +76,9 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                viewModel.deleteFavoriteDisease(diseaseName.toString())
+                if (diseaseName != null) {
+                    viewModel.deleteFavoriteDisease(diseaseName)
+                }
             }
             binding.favorite.isChecked = isChecked
         }
@@ -157,5 +159,8 @@ class DetailActivity : AppCompatActivity() {
 
         companion object {
             const val KEY_ID = "name"
+            const val EXTRA_NAME = "name"
+            const val EXTRA_DETAIL = "detail"
+            const val EXTRA_HANDLE = "handle"
         }
     }

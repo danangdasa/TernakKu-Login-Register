@@ -17,5 +17,5 @@ interface FavoriteDao {
     suspend fun cekFavoriteDisease(diseaseName : String) : String
 
     @Query("DELETE FROM favorite_desease WHERE favorite_desease.diseaseName = :diseaseName")
-    suspend fun deleteFavoriteDisease(diseaseName: String) : String
+    suspend fun deleteFavoriteDisease(diseaseName: String)
 }

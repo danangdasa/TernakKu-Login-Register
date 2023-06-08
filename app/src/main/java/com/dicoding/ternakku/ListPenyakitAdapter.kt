@@ -4,14 +4,18 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.ternakku.data.retrofit.Disease
-import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
-import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponse
 import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
+import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
 import com.dicoding.ternakku.databinding.ListPenyakitBinding
 import com.dicoding.ternakku.ui.detail.DetailActivity
 
 class ListPenyakitAdapter (private var listPenyakit : ArrayList<ListDiseasesResponseItem>)  : RecyclerView.Adapter<ListPenyakitAdapter.ViewHolder>() {
+
+    private var onItemClickCallback: OnItemClickCallback? = null
+
+    fun setItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     class ViewHolder(private val binding: ListPenyakitBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(listPenyakit: ListDiseasesResponseItem){
@@ -43,4 +47,9 @@ class ListPenyakitAdapter (private var listPenyakit : ArrayList<ListDiseasesResp
         listPenyakit.addAll(listPenyakit)
         notifyDataSetChanged()
     }
+
+    interface OnItemClickCallback {
+        fun onItemClick(data: FavoriteDisease)
+    }
+
 }
