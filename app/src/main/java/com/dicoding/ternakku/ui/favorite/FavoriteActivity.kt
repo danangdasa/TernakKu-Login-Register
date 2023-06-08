@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ternakku.ListPenyakitAdapter
+import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
 import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
 import com.dicoding.ternakku.data.retrofit.roomdatabase.FavoriteDisease
 import com.dicoding.ternakku.databinding.ActivityFavoriteBinding

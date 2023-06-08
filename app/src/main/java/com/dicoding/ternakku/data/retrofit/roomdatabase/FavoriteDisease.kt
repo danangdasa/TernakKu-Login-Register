@@ -7,8 +7,7 @@ import java.io.Serializable
 @Entity(tableName = "favorite_desease")
 data class FavoriteDisease (
     @PrimaryKey
-    val id : Int,
     val diseaseName : String,
     val diseaseDetails : String,
-    val handlingMethod : String
+    val handlingMethod : String,
 ): Serializable

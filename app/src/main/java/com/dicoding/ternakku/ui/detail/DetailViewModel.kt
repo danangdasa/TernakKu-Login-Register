@@ -35,10 +35,9 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         favoriteDao = favoriteDb?.favoriteDao()
     }
 
-    fun insertFavoriteDisease(id: Int, diseaseName : String, diseaseDetails : String, handlingMethod : String) {
+    fun insertFavoriteDisease(diseaseName : String, diseaseDetails : String, handlingMethod : String) {
         CoroutineScope(Dispatchers.IO).launch {
             val penyakit = FavoriteDisease(
-                id,
                 diseaseName,
                 diseaseDetails,
                 handlingMethod
@@ -47,11 +46,11 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    suspend fun cekFavoriteDisease(id: Int) = favoriteDao?.cekFavoriteDisease(id)
+    suspend fun cekFavoriteDisease(diseaseName: String) = favoriteDao?.cekFavoriteDisease(diseaseName)
 
-    fun deleteFavoriteDisease(id: Int) {
+    fun deleteFavoriteDisease(diseaseName: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            favoriteDao?.deleteFavoriteDisease(id)
+            favoriteDao?.deleteFavoriteDisease(diseaseName)
         }
     }
 }

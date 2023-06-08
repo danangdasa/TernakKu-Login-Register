@@ -13,9 +13,9 @@ interface FavoriteDao {
     @Query("SELECT * FROM favorite_desease")
     fun getFavoriteDisease(): LiveData<List<FavoriteDisease>>
 
-    @Query("SELECT count(*) FROM favorite_desease WHERE favorite_desease.id = :id")
-    suspend fun cekFavoriteDisease(id : Int) : Int
+    @Query("SELECT count(*) FROM favorite_desease WHERE favorite_desease.diseaseName = :diseaseName")
+    suspend fun cekFavoriteDisease(diseaseName : String) : String
 
-    @Query("DELETE FROM favorite_desease WHERE favorite_desease.id = :id")
-    suspend fun deleteFavoriteDisease(id: Int) : Int
+    @Query("DELETE FROM favorite_desease WHERE favorite_desease.diseaseName = :diseaseName")
+    suspend fun deleteFavoriteDisease(diseaseName: String) : String
 }

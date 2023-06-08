@@ -43,16 +43,16 @@ class DetailActivity : AppCompatActivity() {
             getDetail(getDisease)
         }
 
-        val id = intent.getIntExtra(MainActivity.EXTRA_ID, 0)
+        val diseaseName = intent.getStringExtra(MainActivity.EXTRA_NAME)
         val named = intent.getStringExtra(MainActivity.EXTRA_NAMED)
         val detail = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
 
         var isChecked = false
         CoroutineScope(Dispatchers.IO).launch {
-            val count = viewModel.cekFavoriteDisease(id)
+            val count = viewModel.cekFavoriteDisease(diseaseName.toString())
             withContext(Dispatchers.Main) {
                 if (count != null) {
-                    if (count > 0) {
+                    if (count > 0.toString()) {
                         binding.favorite.isChecked = true
                         isChecked = true
                     } else {
@@ -69,7 +69,6 @@ class DetailActivity : AppCompatActivity() {
                 if (named != null) {
                     if (detail != null) {
                         viewModel.insertFavoriteDisease(
-                            id,
                             named,
                             detail,
                             "handle"
@@ -77,7 +76,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                viewModel.deleteFavoriteDisease(id)
+                viewModel.deleteFavoriteDisease(diseaseName.toString())
             }
             binding.favorite.isChecked = isChecked
         }
