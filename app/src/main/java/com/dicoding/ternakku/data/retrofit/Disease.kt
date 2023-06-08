@@ -5,8 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Disease(
-    val id : Int,
-    val name : String,
-    val detail : String,
-    val heandle : String
+    val diseaseName : String,
+    val diseaseDetails : String,
+    val handlingMethod : String
 ) : Parcelable

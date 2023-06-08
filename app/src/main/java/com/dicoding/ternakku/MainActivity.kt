@@ -73,8 +73,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mainViewModel.getLoginUser().observe(this) { userData ->
-            val tokken = userData.token
-            getListData(tokken)
+            val token = userData.token
+            getListData(token)
         }
     }
 
@@ -92,40 +92,44 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
-
         }
     }
 
-    private fun getListData(token: String){
-        showLoading(true)
-        val client = ApiConfig.getApiService().getList("Bearer " + token)
-        client.enqueue(object : Callback<ListDiseasesResponse> {
-            override fun onResponse(
-                call: Call<ListDiseasesResponse>,
-                response: Response<ListDiseasesResponse>
-            ) {
-                showLoading(false)
-                if(response.isSuccessful){
-                    val responsBody = response.body()
-                    if (responsBody!= null){
-                        setData(responsBody.listDiseasesResponse as List<ListDiseasesResponseItem>)
-                        Toast.makeText(this@MainActivity, responsBody.toString(), Toast.LENGTH_SHORT).show()
+    private fun getListData(token: String) {
+            showLoading(true)
+            val client = ApiConfig.getApiService().getList("Bearer " + token)
+            client.enqueue(object : Callback<ListDiseasesResponse> {
+                override fun onResponse(
+                    call: Call<ListDiseasesResponse>,
+                    response: Response<ListDiseasesResponse>
+                ) {
+                    showLoading(false)
+                    if (response.isSuccessful) {
+                        val responsBody = response.body()
+                        if (responsBody != null) {
+                            setData(responsBody.diseases)
+                            Toast.makeText(
+                                this@MainActivity, "Success",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(this@MainActivity, response.message(), Toast.LENGTH_SHORT)
+                            .show()
                     }
-                } else {
-                    Toast.makeText(this@MainActivity, response.message(), Toast.LENGTH_SHORT).show()
                 }
-            }
 
-            override fun onFailure(call: Call<ListDiseasesResponse>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-                Toast.makeText(this@MainActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
-            }
+                override fun onFailure(call: Call<ListDiseasesResponse>, t: Throwable) {
+                    showLoading(false)
+                    Log.e(TAG, "onFailure: ${t.message.toString()}")
+                    Toast.makeText(this@MainActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
-        })
+            })
     }
 
-    private fun setData(listPenyakit: List<ListDiseasesResponseItem>){
+    private fun setData(listPenyakit: ArrayList<ListDiseasesResponseItem>){
         val adapter = ListPenyakitAdapter(listPenyakit)
         binding.rVList.adapter = adapter
     }
@@ -157,10 +161,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val TAG = "MainActivity"
-        const val EXTRA_ID = "extra_id"
-        const val EXTRA_NAME = "extra_name"
-        const val EXTRA_NAMED = "extra_named"
-        const val EXTRA_DETAIL = "extra_detail"
     }
 
 

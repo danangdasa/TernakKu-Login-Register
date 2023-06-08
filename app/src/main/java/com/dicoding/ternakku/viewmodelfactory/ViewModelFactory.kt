@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.ternakku.MainViewModel
 import com.dicoding.ternakku.preference.LoginPreference
+import com.dicoding.ternakku.ui.detail.DetailViewModel
 import com.dicoding.ternakku.ui.login.LoginViewModel
 import com.dicoding.ternakku.ui.scan.ScanViewModel
 

@@ -43,7 +43,6 @@ class FavoriteActivity : AppCompatActivity() {
         val listDesease = ArrayList<Disease>()
         for (desease in deseases) {
             val userMapped = Disease(
-                desease.id,
                 desease.name,
                 desease.detail,
                 desease.handle
