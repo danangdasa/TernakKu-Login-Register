@@ -9,6 +9,6 @@ data class FavoriteDisease (
     @PrimaryKey
     val diseaseName : String,
     val diseaseDetails : String,
-    val handlingMethod : String,
+    val handlingMethod : String
 
-): Serializable
+    ): Serializable

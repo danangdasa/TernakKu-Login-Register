@@ -43,8 +43,7 @@ class DetailActivity : AppCompatActivity() {
             getDetail(getDisease)
         }
 
-        val diseaseName = intent.getStringExtra(MainActivity.EXTRA_DISEASENAME)
-        val handlingMethod = intent.getStringExtra(MainActivity.EXTRA_NAMED)
+        val diseaseName = intent.getStringExtra(MainActivity.EXTRA_NAME)
         val diseaseDetails = intent.getStringExtra(MainActivity.EXTRA_DETAIL)
 
         var isChecked = false
@@ -68,13 +67,14 @@ class DetailActivity : AppCompatActivity() {
             if (isChecked) {
                 if (diseaseName != null) {
                     if (diseaseDetails != null) {
-                        if (handlingMethod != null) {
-                            viewModel.insertFavoriteDisease(
-                                diseaseName, diseaseDetails, handlingMethod
-                            )
-                        }
+                        viewModel.insertFavoriteDisease(
+                            diseaseName,
+                            diseaseDetails,
+                            "handle"
+                        )
                     }
                 }
+
             } else {
                 if (diseaseName != null) {
                     viewModel.deleteFavoriteDisease(diseaseName)
@@ -84,28 +84,28 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setViewModel(){
+    private fun setViewModel() {
         viewModel = ViewModelProvider(
             this,
         )[DetailViewModel::class.java]
     }
 
-    private fun getDetail(name: String){
+    private fun getDetail(name: String) {
         val client = ApiConfig.getApiService().getDetails(name)
         client.enqueue(object : Callback<DiseaseResponse> {
             override fun onResponse(
                 call: Call<DiseaseResponse>,
-                response: Response<DiseaseResponse>
+                response: Response<DiseaseResponse>,
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val responseBody = response.body()
-                    if (responseBody!= null){
+                    if (responseBody != null) {
                         setDetailsContent(responseBody)
                         Toast.makeText(
                             this@DetailActivity, "Success",
                             Toast.LENGTH_SHORT
                         ).show()
-                    }else{
+                    } else {
                         Toast.makeText(this@DetailActivity, "Error", Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -114,13 +114,14 @@ class DetailActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<DiseaseResponse>, t: Throwable) {
                 Log.e("DetailActivity", "onFailure: ${t.message.toString()}")
-                Toast.makeText(this@DetailActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DetailActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT)
+                    .show()
             }
 
         })
     }
 
-    private fun setDetailsContent(data: DiseaseResponse){
+    private fun setDetailsContent(data: DiseaseResponse) {
         binding.apply {
             tvName.text = data.diseaseName
             tvDescription.text = data.diseaseDetails
@@ -136,31 +137,31 @@ class DetailActivity : AppCompatActivity() {
 //        }
 //    }
 
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.favorite_menu_detail, menu)
-            return super.onCreateOptionsMenu(menu)
-        }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.favorite_menu_detail, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.favorite -> {
-                    Intent(this, FavoriteActivity::class.java).also {
-                        startActivity(it)
-                    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favorite -> {
+                Intent(this, FavoriteActivity::class.java).also {
+                    startActivity(it)
                 }
             }
-            return super.onOptionsItemSelected(item)
         }
-
-        override fun onSupportNavigateUp(): Boolean {
-            onBackPressed()
-            return true
-        }
-
-        companion object {
-            const val KEY_ID = "name"
-            const val EXTRA_NAME = "name"
-            const val EXTRA_DETAIL = "detail"
-            const val EXTRA_HANDLE = "handle"
-        }
+        return super.onOptionsItemSelected(item)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    companion object {
+        const val KEY_ID = "name"
+        const val EXTRA_NAME = "diseaseName"
+        const val EXTRA_DETAIL = "diseaseDetails"
+        const val EXTRA_HANDLE = "handlingMethod"
+    }
+}

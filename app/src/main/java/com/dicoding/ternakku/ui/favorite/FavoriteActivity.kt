@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.ternakku.FavoriteAdapter
 import com.dicoding.ternakku.ListPenyakitAdapter
 import com.dicoding.ternakku.data.retrofit.response.DiseaseResponse
 import com.dicoding.ternakku.data.retrofit.response.ListDiseasesResponseItem
